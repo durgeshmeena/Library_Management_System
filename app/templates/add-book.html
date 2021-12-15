@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block extraStyle %}
+  <link rel="stylesheet" href="/login-assets/fonts/icomoon/style.css">
+  <link rel="stylesheet" href="/login-assets/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="/login-assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/login-assets/css/style.css">
+{% endblock %}
+
+
+{% block content %}
+
+
+
+
+    <!-- ======= Features Section ======= -->
+    <section id="features" class="features" style="padding:0px; padding-top: 100px; ">
+        
+      <div class="container">
+          
+        <header class="section-header" style="padding-bottom:0px">
+          <p>Import Books </p>
+        </header>
+
+        <!-- Feature Tabs -->
+        <div class="row feture-tabs content" data-aos="fade-up" style="padding:0rem 0rem">
+          <!-- <h3>Ratione mollitia eos ab laudantium rerum beatae quo</h3> -->
+          <!-- <div class="col-lg-6">
+            <img src="/img/features-3.png" class="img-fluid" alt="">
+          </div> -->
+
+          <ul class="nav nav-pills mb-3">
+            <li>
+              <a class="nav-link active" data-bs-toggle="pill" href="#tab1">Multi</a>
+            </li>
+            <li>
+              <a class="nav-link" data-bs-toggle="pill" href="#tab2">Single</a>
+            </li>
+          </ul>
+
+          <!-- Tab Content -->
+
+          <div class="tab-content">
+
+            <!-- Tab 1 -->
+            <div class="tab-pane fade show active" id="tab1">
+              <p> Adding Books in Bulk (at max-20) using Frappe-Api </p>
+             
+             <div class="row">
+              <div  class="col-xl-4 text-center" data-aos="fade-right" data-aos-delay="100">
+                <img src="/img/features-3.png" class="img-fluid p-4" alt="">
+              </div>          
+
+              <div class="col-lg-4" id="col-lg-6-1">
+                    <div id="col-xl-8-1" class="col-xl-8 d-flex">
+                      <div class="col-md-8 contents" style="border: #f8f9fa 5px solid;border-radius: 35px;padding: 30px;background-color: white;">
+                            <div class="mb-1" style="text-align: center;">
+                            </div>
+      
+                          <form action="/add-book" method="post">
+
+                            <div class="form-group first" style="padding:5px 15px">
+                              <label for="title">Title</label>
+                              <input type="text" class="form-control" id="title" name="title" >
+                            </div>
+                            
+                            <div class="form-group" style="padding:5px 15px">
+                              <label for="author">Author</label>
+                              <input type="text" class="form-control" id="author" name="author">
+                            </div>
+
+                            <div class="form-group" style="padding:5px 15px">
+                              <label for="isbn">ISBN</label>
+                              <input type="text" class="form-control" id="isbn" name="isbn">
+                            </div>
+
+                            <div class="form-group" style="padding:5px 15px">
+                              <label for="publisher">Publisher</label>
+                              <input type="text" class="form-control" id="" name="publisher">
+                            </div>
+                            
+                            <div class="form-group last" style="padding:5px 15px">
+                              <label for="page">Page</label>
+                              <input type="text" class="form-control" id="page" name="page">
+                            </div>
+                            
+                            <div class="d-flex mb-4 align-items-center"></div>
+            
+                            <input type="submit" value="Add Books" class="btn btn-block btn-primary">
+                            
+                          </form>
+            
+                      </div>
+                    </div> 
+              </div> 
+             </div> 
+            
+            </div>
+
+            <!-- Tab-2 -->
+            <div class="tab-pane fade show" id="tab2">
+              <p> Adding Single Book </p>
+               
+                <div class="row"> 
+                  <div  class="col-xl-4 text-center" data-aos="fade-right" data-aos-delay="100">
+                    <img src="/img/features-3.png" class="img-fluid p-4" alt="">
+                  </div>                 
+                  
+                  <div class="col-lg-6" id="col-lg-6-2"> 
+                    <div id="col-xl-8-2" class="col-xl-8 d-flex">
+                      <div class="col-md-8 contents" style="border: #f8f9fa 5px solid;border-radius: 35px;padding: 30px;background-color: white;">
+                            <div class="mb-1" style="text-align: center;">
+                            </div>
+
+                          <form  action="/add-book" method="post">
+
+                            <div class="row">
+                              <div class="col form-group first" style="padding:5px 15px">
+                                <label for="title">Title</label>
+                                <input type="text" class="form-control" id="title" name="title" >
+                              </div>
+                              <div class="col form-group first" style="padding:5px 15px; margin-left: 3px;">
+                                <label for="author">Author</label>
+                                <input type="text" class="form-control" id="author" name="author">
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col form-group" style="padding:5px 15px">
+                                <label for="isbn">ISBN</label>
+                                <input type="text" class="form-control" id="isbn" name="isbn">
+                              </div>
+                              <div class="col form-group" style="padding:5px 15px;  margin-left: 3px;">
+                                <label for="language_code">Language Code</label>
+                                <input type="text" class="form-control" name="language_code">
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col form-group" style="padding:5px 15px">
+                                <label for="average_rating">Average Rating</label>
+                                <input type="text" class="form-control" name="average_rating">
+                              </div>
+                              <div class="col form-group" style="padding:5px 15px; margin-left: 3px;">
+                                <label for="ratings_count">Ratings Count</label>
+                                <input type="text" class="form-control" name="ratings_count">
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col form-group" style="padding:5px 15px">
+                                <label for="num_pages">Number of Pages</label>
+                                <input type="text" class="form-control" name="num_pages">
+                              </div>
+                              <div class="col form-group" style="padding:5px 15px; margin-left: 3px;">
+                                <label for="text_reviews_count">Text Reviews Count</label>
+                                <input type="text" class="form-control" name="text_reviews_count">
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class=" col form-group last" style="padding:5px 15px">
+                                <label for="publisher">Publisher</label>
+                                <input type="text" class="form-control"  name="publisher">
+                              </div>
+                              <div class="col form-group last" style="padding:5px 15px; margin-left: 3px;">
+                                <label for="publication_date">Publication Date</label>
+                                <input type="text" class="form-control" name="publication_date" >
+                              </div>
+                            </div>
+
+
+                            <div class="d-flex mb-4 align-items-center"></div>
+            
+                            <input type="submit" value="Add Books" class="btn btn-block btn-primary">
+                            
+                          </form>
+            
+                      </div>
+                    </div> 
+                  </div>  
+                </div>
+
+            </div>
+                
+
+          </div>
+
+        </div>
+        <!-- End Feature Tabs -->
+
+
+      </div>
+
+    </section><!-- End Features Section -->
+
+
+
+{% endblock %}
+
+
+{% block extraScript %}
+  <script src="/login-assets/js/jquery-3.3.1.min.js"></script>
+  <script src="/login-assets/js/popper.min.js"></script>
+  <script src="/login-assets/js/bootstrap.min.js"></script>
+  <script src="/login-assets/js/main.js"></script>
+{% endblock %}
