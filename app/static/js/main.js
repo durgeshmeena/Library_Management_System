@@ -287,3 +287,34 @@
   });
 
 })();
+
+function checkId(para){
+    var parentDiv = para.parentNode;
+    var id = parentDiv.getAttribute("id");
+    var name= parentDiv.getAttribute("name");
+    
+    URL =  '/' +String(name) + '/remove/' + String(id)
+    // console.log(id);
+    $.ajax({
+
+      type:"POST",
+      url:URL,
+      data:{url:URL},
+    
+      success:function(responsedata){
+            
+            console.log("Successfull")
+            name= JSON.stringify(responsedata)
+            // data=JSON.parse(responsedata);
+            // alert(data.result);
+            name=JSON.parse(name)
+            console.log(name,name["name"],name.name)
+            // alert(name.message)
+            window.location.replace("http://127.0.0.1:5000/"+String(name['name']));
+
+      }
+   })
+  console.log(URL)
+
+}
+          
