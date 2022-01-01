@@ -7,7 +7,7 @@ import certifi
 # Default Config
 #---------------------------------
 
-DEBUG = True
+DEBUG = False
 
 
 # Loading secretes from .env file
