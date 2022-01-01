@@ -271,7 +271,6 @@ def remove(name,id):
 
 
 
-@app.route('/books/modify/')
 @app.route('/books/modify/<id>',methods=['POST'])
 def modify_book(id):
     data=request.form
@@ -308,7 +307,7 @@ def modify_book(id):
 
 
 
-@app.route('/transactions/')
+@app.route('/transactions')
 def transactions():
 
     transactions = Transaction.objects()
