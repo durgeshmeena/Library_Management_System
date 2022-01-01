@@ -46,7 +46,7 @@ class Member(Document):
     password = StringField(max_length=255)
     admin = BooleanField(required=True, dafault=False)
 
-    active = BooleanField(default=True)
+    active = BooleanField(required=True, default=False)
     created_on = DateTimeField(default=datetime.datetime.now)
 
     current_book = ListField(ReferenceField(Book))
