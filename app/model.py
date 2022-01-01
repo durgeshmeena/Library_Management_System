@@ -1,7 +1,5 @@
 import datetime
-import bson
 from werkzeug.security import  generate_password_hash, check_password_hash 
-# from app import db
 
 from mongoengine import (
     BooleanField, 
@@ -21,17 +19,17 @@ from mongoengine import (
 # ========== Database Models ==============
 
 class Book(Document):
-    bookID = ObjectIdField(default=bson.ObjectId, primary_key=True)
+    bookID = StringField()
     title = StringField()
     authors = StringField()
     average_rating = FloatField()
-    isbn = IntField()
-    isbn13 = IntField()
+    isbn = StringField()
+    isbn13 = StringField()
     language_code = StringField()
     num_pages = IntField()
     ratings_count = IntField()
     text_reviews_count = StringField()
-    publication_date = DateField()
+    publication_date = StringField()
     publisher = StringField()
 
     stock = IntField(default=10)
@@ -43,10 +41,11 @@ class Book(Document):
 class Member(Document):
     name = StringField(max_length=50)
     email = StringField(required=True, max_length=20)
+    username = StringField(required=True, max_length=20)
     password = StringField(max_length=255)
     admin = BooleanField(required=True, dafault=False)
 
-    active = BooleanField(required=True, default=False)
+    active = BooleanField(required=True, dafault=False)
     created_on = DateTimeField(default=datetime.datetime.now)
 
     current_book = ListField(ReferenceField(Book))
@@ -70,7 +69,7 @@ class Transaction(Document):
     id = SequenceField(primary_key=True)
     member = ReferenceField(Member)
     book = ReferenceField(Book)
-    borrow = BooleanField(default=True)
+    borrow = BooleanField(required=True,default=True)
     date = DateTimeField(default=datetime.datetime.now)
 
 
