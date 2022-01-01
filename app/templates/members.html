@@ -61,7 +61,7 @@
                 {%for member in members%}
                 <div class="col-sm" style="padding-bottom: 15px;">
                   <div class="card" style="width: 18rem; ">
-                      <img class="card-img-top" src="/img/member.png" alt="Card image cap">
+                      <a href="member/{{member['username']}}"><img class="card-img-top" src="/img/member.png" alt="Card image cap"></a>
                           <div class="card-body" >
                             <h5 class="card-title">{{member['name']}}</h5>
                             <p class="card-text">Email: {{member['email']}}</p>
