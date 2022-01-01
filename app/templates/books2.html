@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block extraStyle %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{% endblock %}
+
+
+{% block content %}
+
+
+
+
+
+
+  <section id="features" class="features" style="padding-top: 100px;">
+        
+    <div class="container">
+     <!-- ########## -->
+ <!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <div class="d-inline-flex align-items-center justify-content-center align-self-center" style="position:absolute; top:20%; left:35%; z-index:5">
+    <div class="errors">
+      {% for category, message in get_flashed_messages(with_categories=true)  %}
+
+        <div class="alert alert-{{category}} alert-dismissible fade show">
+            <button type="button" class="close" data-dismiss="alert" 
+              aria-label="Close" aria-hidden="true"> &times;</button>
+            {{ message }}&ThickSpace; &ThickSpace;
+        </div>
+
+      {% endfor %}  
+
+    </div>
+  </div>
+
+  <!-- ############## -->    
+      <header class="section-header" >
+        <!-- <h2>Features</h2> -->
+     
+        <p>BOOKS</p>
+      </header>
+
+      <div class="row">
+
+    
+
+        <div> 
+            
+
+            <div class="container">
+              <div class="row">
+
+             
+
+
+
+
+
+                {%for book in books%}
+                <div class="col-sm" style="padding-bottom: 15px;">
+                  <div class="card" style="width: 18rem; ">
+                      <img class="card-img-top" src="/img/book.png" alt="Card image cap">
+                          <div class="card-body" >
+                            <h5 class="card-title">{{book['title']}}</h5>
+                            <p class="card-text">Author: {{book['authors']}}</p>
+                            <p class="card-text">ISBN: {{book['isbn']}}</p>
+                            <p class="card-text">Quantity: {{book['stock']}}</p>
+                            <div name="books" id = {{book['id']}}>
+                              <button  type="button"  class="btn btn-primary" data-toggle="modal" data-target="#exampleModal-{{book['id']}}">
+                                  Modify
+                                </button>
+                              
+                                <div class="modal fade" id="exampleModal-{{book['id']}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body ">
+                              
+                                       <div class="content">
+                                         <div class="contents">
+                                          <!-- <img style="width: 10rem; align" class="card-img-top" src="/img/book.png" alt="Card image cap"> -->
+
+
+                                          <form action="books/modify/{{book['id']}}" method="post">
+                                                 
+                                            <div class="form-group first" style="margin-bottom: 5px;">
+                                              <label for="title">Title</label>
+                                              <input type="text" class="form-control" id="name" name="title" value="{{book['title']}}">
+                                            
+                                
+                                            </div>
+                              
+                                            <div class="form-group first" style="margin-bottom: 5px;">
+                                              <label for="auhors">Author</label>
+                                              <input type="text" class="form-control"   name="authors" value={{book['authors']}}>
+                                            
+                                
+                                            </div>
+                                            
+                                            <div class="form-group last mb-4">
+                                              <label for="quantity">Quantity:</label>
+                                              <input type="text" class="form-control"  name="quantity" value={{book['stock']}} >
+                                              
+                                            </div>
+                                            
+                                            <div class="form-group last mb-4">
+                                                <label for="active">Is Available</label>
+                                                <input type="checkbox" checked={{book['available']}}  name="active" >
+                                                
+                                              </div>
+
+                                              <!-- <div class="container"> -->
+                                                <div class="row">
+                                                  <div class="col">Average Rating</div>
+                                                  <div class="col">{{book['average_rating']}}</div>
+                                                  <div class="w-100"></div>
+                                                  <div class="col">Total Pages</div>
+                                                  <div class="col">{{book['num_pages']}}</div>
+                                                  <div class="w-100"></div>
+                                                  <div class="col">Publisher</div>
+                                                  <div class="col">{{book['publisher']}}</div>
+                                                  <div class="w-100"></div>
+                                                  <div class="col">Total Issued</div>
+                                                  <div class="col">{{book['issue_count']}}</div>
+
+                                                </div>
+                                              <!-- </div> -->
+                                              <br>
+                                              <button lass="btn"  style="background-color:green;"> Rent Out</button>
+                                              <label for="member">Choose your member from the list:</label>
+                                                        <input list="members" name="member" id="member">
+
+                                                        <datalist id="members">
+                                                            {% for member in members %}
+                                                            <option value="{{member['email']}}" >{{member['name']}}</option>
+                                                            {% endfor %}
+                                                        
+                                                        </datalist>
+                                                        <br><br><br><br>
+                                            <input type="submit" value="Modify" class="btn btn-block btn-primary">
+                                            
+                                          </form>
+                                         </div>
+                                       </div>
+                                
+                                      </div>
+                                      <div class="modal-footer">
+                                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save changes</button> -->
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                              <button class="btn" onclick=checkId(this) style="background-color: red;">Remove</button>
+                            </div>
+                          </div>
+                      </div>
+  
+                </div>
+
+            
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+         
+        
+
+
+
+
+
+
+     
+
+  </section><!-- End Features Section -->
+
+
+
+
+
+{% endblock %}
+
+
+{% block extraScript %}
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+{% endblock %}
+
+
