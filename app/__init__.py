@@ -12,6 +12,6 @@ from flask_mongoengine import MongoEngine
 app = Flask(__name__, static_url_path='',static_folder='static', )
 app.config.from_object('config')
 app.config['SECRET_KEY']  = 'hgfds$#2nBGY*^&*isdft549uht4345umnbgfc?65v'
-# db = MongoEngine(app)
+db = MongoEngine(app)
 
 from app import views
