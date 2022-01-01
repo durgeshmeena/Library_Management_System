@@ -1,18 +1,19 @@
 from datetime import timedelta
 import requests
 from flask.json import jsonify
-from wtforms.fields import form
 from app import app
 from flask import render_template, redirect, url_for, flash ,request, session
 from .model import *
 from .controlars import *
-from mongoengine.errors import ValidationError, DoesNotExist
-
+from mongoengine.errors import DoesNotExist
 
 @app.route('/')
 def home():
     return render_template('home.html')
 
+@app.errorhandler(404) 
+def invalid_route(e): 
+    return render_template('404.html')
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
@@ -51,10 +52,10 @@ def login():
 
                 else:
                     flash('Password is incorrect', 'danger')
-                    return redirect( url_for('signup') )
+                    return redirect( url_for('login') )
             except DoesNotExist:
                 flash('Email not registered!!', 'danger')
-                return redirect( url_for('login') )
+                return redirect( url_for('signup') )
 
 
         else:
@@ -82,17 +83,27 @@ def signup():
             form_name = form.name.data
             form_email = form.email.data
             form_email = form_email.lower()
+            form_username = form.username.data
             form_password = form.password.data
 
             try:
-                existing_user = Member.objects.get(email=form_email)
+                existing_email = Member.objects.get(email=form_email)
+
                 flash('Email already registered!!', 'danger')
-                return redirect( url_for('signup') )
+                # return redirect( url_for('signup') )
             except DoesNotExist:
-                user = Member(name=form_name, email=form_email, password=form_password, admin=False )
-                user.set_password(form_password)
-                user.save()
-                return jsonify(user), 200
+                try:
+                    existing_user = Member.objects.get(username=form_username)
+                    flash('Username already registered!!', 'danger')
+                    # return redirect( url_for('signup') )
+
+                except DoesNotExist:
+                    
+                    user = Member(name=form_name, email=form_email, password=form_password,username=form_username, admin=False,active=False )
+                    user.set_password(form_password)
+                    user.save()
+                    return jsonify(user), 200
+                
             
             # return redirect( url_for('signup') )  
 
@@ -103,7 +114,10 @@ def signup():
                 flash('Email is required', 'danger')
             else:    
                 flash_errors(form)
-            return redirect( url_for('signup') )  
+            
+            # return render_template('signup.html', form=form)
+            # return redirect( url_for('signup') )
+                
     
     return render_template('signup.html', form=form)    
 
@@ -132,7 +146,174 @@ def add_book():
         print(request_url)
         books_req = requests.get(request_url).json()
         books_data = books_req.get('message')
-        print(books_data)
-        return jsonify(books_data)
+        # print(books_data)
+        for book in books_data:
+           
+            db_book = Book.objects(bookID=(book['bookID']))
+            # print(db_book)
+            if len(db_book) == 0:
+                new_book = Book(bookID=book['bookID'],title=book['title'],
+                authors=book['authors'],average_rating=book['average_rating'],
+                isbn=book['isbn'],isbn13=book['isbn13'],language_code=book['language_code'],
+                num_pages=book["  num_pages"],ratings_count=book['ratings_count'],text_reviews_count=book['text_reviews_count'],
+                publication_date=book['publication_date'],publisher=book['publisher'])
+                # print(new_book)
+                new_book.save()
+                flash('book added successfully','success')
+            else:
+                flash('Book Already Exist', 'danger')
+
+        # return jsonify(books_data)
 
     return render_template('add-book.html')                 
+
+
+@app.route('/books')
+
+def books():
+    print("Reached1")
+    books = Book.objects()
+    members=Member.objects()
+    return render_template('books2.html',books=books,members=members)
+
+@app.route('/members')
+def members():
+    print("Reached1")
+    members = Member.objects()
+       
+    return render_template('members.html',members=members)
+
+
+
+@app.route('/member/<username>')
+def member(username):
+    
+    # print("Reached1")
+    member = Member.objects(username=username)
+    if len(member) > 0:
+        member = member[0]
+
+       
+    return render_template('member.html',member=member)
+
+
+
+
+
+@app.route('/modal')
+def modal():
+    return render_template('modal.html')
+
+@app.route('/member/<id>',methods=['POST'])
+def modify(id):
+    member=Member.objects(pk=id)
+    print(member)
+    print(request.form)
+    update_name=request.form['name']
+    update_email=request.form['email']
+    update_balance=request.form['balance']
+    update_active=request.form.get('active')
+
+    if update_active:
+        update_active=True
+    else:
+        update_active=False
+    # print(update_email)
+    # print(member[0]['email'])
+
+    if update_email == member[0]['email']:
+        updated_member=Member.objects(id=id).update(set__name=update_name,set__balance=update_balance,set__active=update_active)
+        # member[0]['name']=update_name
+        # member[0]['balance']=update_balance
+        # member[0]['active']=update_active
+        # member[0].save()
+        print(updated_member)
+        flash('Data Updated Successfully','success')
+
+    else:
+        flash('Oops! Unable to Save Data','Danger')
+    print(request.form)
+
+    url       =   member[0]['username']
+    return redirect(url)
+    # return redirect(url_for('members'))
+
+
+
+
+
+
+
+
+
+
+
+@app.route('/<name>/remove/<id>',methods=['POST'])
+def remove(name,id):
+    if name == 'members':
+        user = Member.objects(id=id)
+        if user[0]['admin']:
+            flash('Cannot Remove admin','danger')
+            return {'name':'members','message':'Cannot Remove admin'}
+        else:
+            deleted_data=user[0].delete()
+            print(deleted_data)
+            flash('User Deleted SuccessFully','danger')
+            return {'name':'members','message':'user deleted successfully'}
+
+    elif name=='books':
+        deleted_data=Book.objects(id=id).delete()
+        print(deleted_data)
+        flash('Book Deleted SuccessFully','danger')
+        return {'name':'books','message':'book deleted successfully'}
+
+
+
+
+
+@app.route('/books/modify/')
+@app.route('/books/modify/<id>',methods=['POST'])
+def modify_book(id):
+    data=request.form
+    print(data) 
+    quantity = request.form.get('quantity')
+    user_email = request.form.get('member')
+    available = True
+    
+    book = Book.objects(id=id)[0]
+    stock = book['stock']
+    if stock>1:
+        issue_count = book['issue_count'] +1
+        stock = stock -1
+    
+        if stock==0:
+            available =False
+        book.update(set__issue_count=issue_count, set__stock=stock,set__available=available)
+        
+        member = Member.objects(email=user_email)[0]
+        member.update(add_to_set__current_book=[id])
+        transaction = Transaction(book=book['id'],member=member['id'],borrow=True)
+        transaction.save()
+        print(transaction)
+
+
+
+        flash('Book Issued Successfully','success')
+    else:
+        flash('Book Cannot be Issued','danger')
+    
+
+    return redirect(url_for('books'))
+
+
+
+
+@app.route('/transactions/')
+def transactions():
+
+    transactions = Transaction.objects()
+    print(transactions[0])
+
+    return render_template('transactions.html',transactions=transactions)
+
+
