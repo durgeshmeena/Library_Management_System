@@ -2073,3 +2073,35 @@ section {
   color: #012970;
 }
 
+
+
+
+.bd-highlight {
+  background-color: rgba(86,61,124,0.15);
+  border: 1px solid rgba(86,61,124,0.15);
+}
+
+
+.blog {
+  padding: 40px 0 20px 0;
+}
+.boxshadow {
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.b-g-True{
+
+  background-color: #baf3cd;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 16px rgba(19, 209, 12, 0.733);
+}
+.b-g-False{
+
+  background-color: #fa9595;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 16px rgba(230, 15, 51, 0.822);
+}
