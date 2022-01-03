@@ -113,7 +113,9 @@
                                             <div class="form-group last mb-4">
                                               <label for="active">Active:</label>
                                               <input type="checkbox" 
-                                                
+                                                {% if member['active'] %}
+                                                  checked
+                                                {% endif%}
                                                 name="active" >
                                               
                                             </div>
