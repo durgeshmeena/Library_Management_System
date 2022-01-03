@@ -73,17 +73,7 @@
                               </button> -->
                               
 
-                              <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                  <button class="btn btn-success" id="{{book['id']}}" onclick="issueBook(this.id)" type="button" {% if not book['available'] %} disabled {% endif%} >RentOut</button>
-                                </div>
-                                <input list="members" id="member" class="form-control" placeholder="member@gmail.com" aria-label="" aria-describedby="basic-addon1" autocomplete="off" {% if not book['available'] %} disabled {% endif%}>
-                                  <datalist id="members">
-                                    {% for member in members %}
-                                    <option value="{{member['email']}}" >{{member['name']}}</option>
-                                    {% endfor %}
-                                  </datalist>
-                              </div>
+                              
 
                               <input type="submit" value="Modify" class="btn btn-block btn-primary" data-toggle="modal" data-target="#exampleModal-{{book['id']}}">
                               
