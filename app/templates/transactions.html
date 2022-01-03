@@ -16,7 +16,6 @@
 <section id="features" class="features" style="padding-top: 150px;">
     
     <div class="container">
-    
         <header class="section-header" >
             <!-- <h2>Features</h2> -->
          
@@ -29,8 +28,8 @@
             <div class="p-2 w-50 ">Rent Out</div>
             <div class="p-2 w-50 ">Date & Time</div>
         </div>
+
         {% for trans in transactions %}
-        
         <div class="d-flex  b-g-{{trans.borrow}}">
             <div class="p-2 w-10 "> {{trans.id}}&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</div>
             <div class="p-2 w-100 ">{{trans.book}}</div>
@@ -38,12 +37,7 @@
             <div class="p-2 w-50 ">{{trans.borrow}}</div>
             <div class="p-2 w-50 ">{{trans.date}}</div>
         </div>
-
-        
-
         {% endfor  %}
-    
-    
     
     </div>
 
