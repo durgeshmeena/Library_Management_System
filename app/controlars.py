@@ -69,3 +69,29 @@ def login_required(f):
             flash("You need to login first", 'danger')
             return redirect(url_for('login'))
     return wrap
+
+def admin_login(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            if session['user'].get('admin'):
+                return f(*args, **kwargs)
+            else:
+                flash("You don't have permission to perform this action", 'danger')
+                return redirect(url_for('home'))
+        else:
+            flash("You need to login first", 'danger')
+            return redirect(url_for('login'))
+    return wrap                                        
+
+
+def is_logout(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            flash('You are already Logged-in', 'success')
+            return redirect(url_for('home'))
+        else:
+            return f(*args, **kwargs)
+    return wrap            
+

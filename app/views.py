@@ -17,6 +17,7 @@ def invalid_route(e):
     return render_template('404.html')
 
 @app.route('/login', methods=('GET', 'POST'))
+@is_logout
 def login():
     form = LoginForm()
 
@@ -39,7 +40,7 @@ def login():
             try:
                 user = Member.objects.get(email=form_email)
                 if user.check_password(form_password):
-                    flash('User Data correct', 'success')
+                    flash('Successfully logged-in', 'success')
 
                     session.permanent = True
                     if form_checkbox:
@@ -49,7 +50,7 @@ def login():
                     session['user'] = user
                     session['logged_in'] = True
 
-                    return jsonify(user)
+                    return redirect( '/member/'+session['user']['username'] )
 
                 else:
                     flash('Password is incorrect', 'danger')
@@ -71,6 +72,7 @@ def login():
     
 
 @app.route('/signup', methods=['GET', 'POST'])
+@is_logout
 def signup():
     form = SignupForm()
     if request.method=='POST' :
@@ -103,7 +105,8 @@ def signup():
                     user = Member(name=form_name, email=form_email, password=form_password,username=form_username, admin=False,active=False )
                     user.set_password(form_password)
                     user.save()
-                    return jsonify(user), 200
+                    flash('Account created Successfully', 'success')
+                    return redirect(url_for('login'))
                 
             
             # return redirect( url_for('signup') )  
@@ -122,13 +125,21 @@ def signup():
     
     return render_template('signup.html', form=form)    
 
+@app.route('/logout')
+@login_required
+def logout():
+    session.pop('user', None)
+    session.pop('logged_in', None)
+    flash('Successfully Logged out', 'success')
+    return redirect(url_for('home'))
 
 @app.route('/dashboard/')
-# @login_required
+@login_required
 def dashboard():
     return render_template('dashboard.html')
-                 
+                
 @app.route('/add-book', methods=['GET', 'POST'])
+@admin_login
 def add_book():
     if request.method=='POST':
         title = request.form.get('title')
@@ -176,8 +187,8 @@ def books():
     return render_template('books2.html',books=books,members=members)
 
 @app.route('/members')
+@admin_login
 def members():
-    print("Reached1")
     members = Member.objects()
        
     return render_template('members.html',members=members)
@@ -185,12 +196,18 @@ def members():
 
 
 @app.route('/member/<username>')
+@login_required
 def member(username):
     
-    # print("Reached1")
     member = Member.objects(username=username)
     if len(member) > 0:
         member = member[0]
+        if not session['user']['admin']:
+            if member['username'] == session['user']['username']:
+                pass
+            else:
+                flash("You don't have permission to perform this action", 'danger')
+                return redirect('/member/'+session['user']['username'])
 
        
     return render_template('member.html',member=member)
@@ -204,6 +221,7 @@ def modal():
     return render_template('modal.html')
 
 @app.route('/member/<id>',methods=['POST'])
+@admin_login
 def modify(id):
     member=Member.objects(pk=id)
     print(member)
@@ -248,6 +266,7 @@ def modify(id):
 
 
 @app.route('/<name>/remove/<id>',methods=['POST'])
+@admin_login
 def remove(name,id):
     if name == 'members':
         user = Member.objects(id=id)
@@ -269,6 +288,7 @@ def remove(name,id):
 
 
 @app.route('/books/modify/<id>',methods=['POST'])
+@admin_login
 def modify_book(id):
     data=request.form
     print(data) 
@@ -290,6 +310,7 @@ def modify_book(id):
     return redirect(url_for('books'))
 
 @app.route('/book/rent-out/<id>',methods=['POST'])
+@admin_login
 def rent_book(id):
 
     data = request.get_data().decode('utf-8')
@@ -326,6 +347,7 @@ def rent_book(id):
     
 
 @app.route('/book/return', methods=['POST'])
+@admin_login
 def book_return():
     data = request.get_data().decode('utf-8')
     data = json.loads(data)
@@ -353,6 +375,7 @@ def book_return():
 
 
 @app.route('/transactions')
+@admin_login
 def transactions():
     transactions = Transaction.objects()
     return render_template('transactions.html',transactions=transactions)

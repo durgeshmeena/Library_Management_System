@@ -67,13 +67,21 @@
                             <p class="card-text">Author: {{book['authors']}}</p>
                             <p class="card-text">ISBN: {{book['isbn']}}</p>
                             <p class="card-text">Quantity: {{book['stock']}}</p>
-                            <div name="books" id = {{book['id']}}>
+                            <div name="books" id = {{book['id']}}
+                              {% if 'logged_in' in session  %}
+                                {% if not session['user'].get('admin') %}
+                                  style="display: none;"
+                                {% endif %}
+                              {% else %}
+                                style="display: none;"
+                              {% endif %}
+                            >
                               
                               <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                   <button class="btn btn-success" id="{{book['id']}}" onclick="issueBook(this.id)" type="button" {% if not book['available'] %} disabled {% endif%} >RentOut</button>
                                 </div>
-                                <input list="members" id="member" class="form-control" placeholder="member@gmail.com" aria-label="" aria-describedby="basic-addon1" autocomplete="off" {% if not book['available'] %} disabled {% endif%}>
+                                <input list="members" id="member-{{book['id']}}" class="form-control" placeholder="member@gmail.com" aria-label="" aria-describedby="basic-addon1" autocomplete="off" {% if not book['available'] %} disabled {% endif%}>
                                   <datalist id="members">
                                     {% for member in members %}
                                     <option value="{{member['email']}}" >{{member['name']}}</option>

@@ -347,7 +347,8 @@ function returnBook(item){
 
 function issueBook(bookId){
   console.log(bookId)
-  user = $('#member').val()
+  member_input_id = '#member-'+bookId
+  user = $(member_input_id).val()
   console.log(user)
   URL = '/book/rent-out/' + String(bookId)
   $.ajax({

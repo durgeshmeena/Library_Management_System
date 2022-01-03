@@ -5,6 +5,25 @@
 {% block content %}
 
   <!-- ======= Hero Section ======= -->
+
+  
+  <div class="d-inline-flex align-items-center justify-content-center align-self-center" style="position:absolute; top:13%; left:35%; z-index:5">
+    <div class="errors">
+      {% for category, message in get_flashed_messages(with_categories=true)  %}
+
+        <div class="alert alert-{{category}} alert-dismissible fade show">
+            
+            {{ message }}&ThickSpace; &ThickSpace;
+            <button type="button" class="close" data-dismiss="alert" 
+              aria-label="Close" aria-hidden="true"> &times;</button>
+        </div>
+
+      {% endfor %}  
+
+    </div>
+  </div>
+
+
   <section id="hero" class="hero d-flex align-items-center">
 
     <div class="container">
