@@ -67,8 +67,8 @@ class Member(Document):
 
 class Transaction(Document):
     id = SequenceField(primary_key=True)
-    member = ReferenceField(Member)
-    book = ReferenceField(Book)
+    member = StringField()
+    book = StringField()
     borrow = BooleanField(required=True,default=True)
     date = DateTimeField(default=datetime.datetime.now)
 
