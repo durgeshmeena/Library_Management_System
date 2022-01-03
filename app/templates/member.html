@@ -121,7 +121,15 @@
                   <p>Balance: <span>{{member['balance']}}</span> </p>
                   <p>Total Purchase: <span>{{member['total_purchased']}}</span> </p>
 
-                  <div name = "members" id = {{member['id']}}>
+                  <div name = "members" id = {{member['id']}} 
+                    {% if 'logged_in' in session  %}
+                      {% if not session['user'].get('admin') %}
+                        style="display: none;"
+                      {% endif %}
+                    {% else %}
+                      style="display: none;"
+                    {% endif %}
+                  >
                     <button  type="button"  class="btn btn-primary" data-toggle="modal" data-target="#Modal-{{member['id']}}">
                         Modify
                       </button>
@@ -148,7 +156,15 @@
                           <li class="dropdown-item" style="white-space: normal;">
                             <div class="d-flex align-items-center rounded">
                               <div class="p-2 w-100 ">{{current_book['title']}} </div>
-                              <div class="p-2 w-50 ">
+                              <div class="p-2 w-50 " 
+                                {% if 'logged_in' in session  %}
+                                  {% if not session['user'].get('admin') %}
+                                    style="display: none;"
+                                  {% endif %}
+                                {% else %}
+                                  style="display: none;"
+                                {% endif %}
+                              >
                                 <button type="button" user="{{member['username']}}" book="{{current_book['title']}}" id="{{current_book['id']}}"" onclick="returnBook(this)" class="btn btn-success">Return Book</button>
                               </div>
                             </div>
