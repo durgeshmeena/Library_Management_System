@@ -1,4 +1,5 @@
 from datetime import timedelta
+from flask import json
 import requests
 from flask.json import jsonify
 from app import app
@@ -169,9 +170,7 @@ def add_book():
 
 
 @app.route('/books')
-
 def books():
-    print("Reached1")
     books = Book.objects()
     members=Member.objects()
     return render_template('books2.html',books=books,members=members)
@@ -257,13 +256,11 @@ def remove(name,id):
             return {'name':'members','message':'Cannot Remove admin'}
         else:
             deleted_data=user[0].delete()
-            print(deleted_data)
             flash('User Deleted SuccessFully','danger')
             return {'name':'members','message':'user deleted successfully'}
 
     elif name=='books':
         deleted_data=Book.objects(id=id).delete()
-        print(deleted_data)
         flash('Book Deleted SuccessFully','danger')
         return {'name':'books','message':'book deleted successfully'}
 
@@ -276,43 +273,88 @@ def modify_book(id):
     data=request.form
     print(data) 
     quantity = request.form.get('quantity')
-    user_email = request.form.get('member')
-    available = True
+    available = request.form.get('active')
+    print('available1=', available)
+    if available:
+        available = True
+    else:
+        available = False
+            
+    print('available2=', available)
     
     book = Book.objects(id=id)[0]
-    stock = book['stock']
-    if stock>1:
-        issue_count = book['issue_count'] +1
-        stock = stock -1
-    
-        if stock==0:
-            available =False
-        book.update(set__issue_count=issue_count, set__stock=stock,set__available=available)
+    book.update(set__stock=quantity, set__available=available)
         
-        member = Member.objects(email=user_email)[0]
-        member.update(add_to_set__current_book=[id])
-        transaction = Transaction(book=book['id'],member=member['id'],borrow=True)
-        transaction.save()
-        print(transaction)
-
-
-
-        flash('Book Issued Successfully','success')
-    else:
-        flash('Book Cannot be Issued','danger')
     
-
+    flash('Book Data Modified Sucessfully','success')
     return redirect(url_for('books'))
 
+@app.route('/book/rent-out/<id>',methods=['POST'])
+def rent_book(id):
 
+    data = request.get_data().decode('utf-8')
+    data = json.loads(data)
+
+    print(data['user'], id)    
+    
+    user_email = data['user']
+    member = Member.objects(email=user_email)
+    print(member, bool(member))
+    if member:
+        member = member[0]
+        book = Book.objects(id=id)[0]
+        stock = book['stock']
+        available = book['available']
+        if stock>1:
+            issue_count = book['issue_count'] +1
+            stock = stock -1
+
+            if stock==0:
+                available = False
+            book.update(set__issue_count=issue_count, set__stock=stock,set__available=available)
+            
+            member.update(add_to_set__current_book=[id])
+            transaction = Transaction(book=book['title'],member=member['name'],borrow=True)
+            transaction.save()
+            flash('Book Issued Successfully','success')
+        else:
+            flash('Book Cannot be Issued','danger')
+    else:
+        flash('User not found','danger')
+
+    return {'status':'Success'}
+    
+
+@app.route('/book/return', methods=['POST'])
+def book_return():
+    data = request.get_data().decode('utf-8')
+    data = json.loads(data)
+
+    user = data['user']
+    book_name = data['book']
+    book_id = data['id']
+
+    # print(book_id, type(book_id))
+    
+    book_db = Book.objects(id=book_id).first()
+    book_db_id = book_db['id']
+
+    # print(book_db_id, type(book_db_id))
+
+    member = Member.objects(username=user)[0]
+    member.update( pull__current_book = book_db_id, add_to_set__issued_books=[book_db_id])
+
+    transaction = Transaction(book=book_name,member=member['name'],borrow=False)
+    transaction.save()
+    
+    flash('Book Returned Successfully','success')
+
+    return {'username':user}
 
 
 @app.route('/transactions')
 def transactions():
-
     transactions = Transaction.objects()
-    print(transactions[0])
-
     return render_template('transactions.html',transactions=transactions)
 
 
