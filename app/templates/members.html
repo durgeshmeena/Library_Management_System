@@ -89,7 +89,7 @@
                                           <!-- <img style="width: 10rem; align" class="card-img-top" src="/img/member.png" alt="Card image cap"> -->
 
 
-                                          <form action="members/modify/{{member['id']}}" method="post">
+                                          <form action="/member/{{member['id']}}" method="post">
                                                  
                                             <div class="form-group first" style="margin-bottom: 5px;">
                                               <label for="name">Name</label>
@@ -112,7 +112,11 @@
                                             </div>
                                             <div class="form-group last mb-4">
                                               <label for="active">Active:</label>
-                                              <input type="checkbox" checked={{member['active']}}  name="active" >
+                                              <input type="checkbox" 
+                                                {% if member['active'] %}
+                                                  checked
+                                                {% endif%}
+                                                name="active" >
                                               
                                             </div>
                                             

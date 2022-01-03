@@ -687,26 +687,57 @@ section {
     font-size: 28px;
   }
 }
-.features .feature-icons .content .icon-box {
+.features .feature-icons .content .icon-box-1 {
   display: flex;
+  flex-direction: column;
+  align-content: space-around;
+  justify-content: center;
+  align-items: flex-start;
 }
-.features .feature-icons .content .icon-box h4 {
+.features .feature-icons .content .icon-box-1 h4 {
   font-size: 20px;
   font-weight: 700;
   margin: 0 0 10px 0;
   color: #012970;
 }
-.features .feature-icons .content .icon-box i {
+.features .feature-icons .content .icon-box-1 p {
+  font-size: 20px;
+  font-weight: 600;
+  color: #848484;
+}
+.features .feature-icons .content .icon-box-1 p span {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  color: #012970
+}
+
+.features .feature-icons .content .icon-box-1 i {
   font-size: 44px;
   line-height: 44px;
   color: #0245bc;
   margin-right: 15px;
 }
-.features .feature-icons .content .icon-box p {
-  font-size: 15px;
-  color: #848484;
+
+.features .feature-icons .content .icon-box-2 {
+  display: flex;
+  flex-direction: column;
+  align-content: space-around;
+  justify-content: space-evenly;
 }
 
+.dropdown-list {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1.5rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
 /*--------------------------------------------------------------
 # Services
 --------------------------------------------------------------*/
