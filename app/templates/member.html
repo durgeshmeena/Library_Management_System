@@ -147,7 +147,7 @@
                 
                   <div class="dropdown">
                     <button class="btn btn-secondary  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                      Return Books
+                      Current Books
                     </button>
                     <ul class="dropdown-menu list-unstyled" aria-labelledby="dropdownMenuButton1" style="overflow-y:auto; max-height:40vh">
                       
@@ -165,7 +165,7 @@
                                   style="display: none;"
                                 {% endif %}
                               >
-                                <button type="button" user="{{member['username']}}" book="{{current_book['title']}}" id="{{current_book['id']}}"" onclick="returnBook(this)" class="btn btn-success">Current Books</button>
+                                <button type="button" user="{{member['username']}}" book="{{current_book['title']}}" id="{{current_book['id']}}"" onclick="returnBook(this)" class="btn btn-success">Return</button>
                               </div>
                             </div>
                           </li>

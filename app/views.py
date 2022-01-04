@@ -327,19 +327,26 @@ def rent_book(id):
         stock = book['stock']
         available = book['available']
         if stock>1:
-            issue_count = book['issue_count'] +1
-            stock = stock -1
+            if member['balance']>80 and member['active']:
+                issue_count = book['issue_count'] +1
+                stock = stock -1
 
-            if stock==0:
-                available = False
-            book.update(set__issue_count=issue_count, set__stock=stock,set__available=available)
-            
-            member.update(add_to_set__current_book=[id])
-            transaction = Transaction(book=book['title'],member=member['name'],borrow=True)
-            transaction.save()
-            flash('Book Issued Successfully','success')
+                if stock==0:
+                    available = False
+                book.update(set__issue_count=issue_count, set__stock=stock,set__available=available)
+                
+                updated_balance = member['balance'] - 50
+                updated_total_purchased = member['total_purchased'] + 50
+                member.update(add_to_set__current_book=[id], set__balance=updated_balance, set__total_purchased=updated_total_purchased)
+
+                transaction = Transaction(book=book['title'],member=member['name'],borrow=True)
+                transaction.save()
+                flash('Book Issued Successfully','success')
+            else:
+                flash('Book not Issued','danger')
+                flash('Member Account is not Active / Balance is less than minimun required','danger')
         else:
-            flash('Book Cannot be Issued','danger')
+            flash('Book is not available','danger')
     else:
         flash('User not found','danger')
 
@@ -364,12 +371,20 @@ def book_return():
     # print(book_db_id, type(book_db_id))
 
     member = Member.objects(username=user)[0]
-    member.update( pull__current_book = book_db_id, add_to_set__issued_books=[book_db_id])
 
-    transaction = Transaction(book=book_name,member=member['name'],borrow=False)
-    transaction.save()
-    
-    flash('Book Returned Successfully','success')
+    if member['balance'] > 30 and member['active']:
+        updated_balance = member['balance'] - 30
+        updated_total_purchased = member['total_purchased'] + 30
+
+        member.update( pull__current_book = book_db_id, add_to_set__issued_books=[book_db_id], set__balance=updated_balance, set__total_purchased=updated_total_purchased)
+
+        transaction = Transaction(book=book_name,member=member['name'],borrow=False)
+        transaction.save()
+        
+        flash('Book Returned Successfully','success')
+    else:
+        flash('Book not Returned','danger')
+        flash('Member Account is not Active / Balance is less than minimun required','danger')
 
     return {'username':user}
 
