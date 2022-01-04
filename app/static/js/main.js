@@ -310,11 +310,10 @@ function checkId(para){
             name=JSON.parse(name)
             console.log(name,name["name"],name.name)
             // alert(name.message)
-            window.location.replace("http://127.0.0.1:5000/"+String(name['name']));
+            window.location.replace(window.location.origin+"/"+String(name['name']));
 
       }
    })
-  console.log(URL)
 
 }
           
@@ -338,7 +337,7 @@ function returnBook(item){
       username = JSON.stringify(responsedata)
       username=JSON.parse(username)
       // console.log(username,username.username)
-      window.location.replace("http://127.0.0.1:5000/member/"+String(username.username));
+      window.location.replace(window.location.origin+"/member/"+String(username.username));
     }
 
   })
@@ -359,7 +358,7 @@ function issueBook(bookId){
     data : JSON.stringify({user:user}),
 
     success: function(responsedata){
-      window.location.replace("http://127.0.0.1:5000/books");
+      window.location.replace(window.location.origin+"/books");
     }
 
   })
