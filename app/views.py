@@ -10,7 +10,7 @@ from mongoengine.errors import DoesNotExist
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('home.html', active_home=True)
 
 @app.errorhandler(404) 
 def invalid_route(e): 
@@ -44,7 +44,7 @@ def login():
 
                     session.permanent = True
                     if form_checkbox:
-                        app.permanent_session_lifetime = timedelta(days=1)
+                        app.permanent_session_lifetime = timedelta(hours=5)
                     else:
                         app.permanent_session_lifetime = timedelta(hours=1)
                     session['user'] = user
@@ -67,7 +67,7 @@ def login():
                 flash_errors(form)
             return redirect( url_for('login') )  
     
-    return render_template('login.html', form=form)    
+    return render_template('login.html', form=form, active_login=True)    
 
     
 
@@ -123,7 +123,7 @@ def signup():
             # return redirect( url_for('signup') )
                 
     
-    return render_template('signup.html', form=form)    
+    return render_template('signup.html', form=form, active_signup=True)    
 
 @app.route('/logout')
 @login_required
@@ -177,21 +177,21 @@ def add_book():
 
         # return jsonify(books_data)
 
-    return render_template('add-book.html')                 
+    return render_template('add-book.html', active_add_book=True)                 
 
 
 @app.route('/books')
 def books():
     books = Book.objects()
     members=Member.objects()
-    return render_template('books2.html',books=books,members=members)
+    return render_template('books2.html',books=books,members=members, active_books=True)
 
 @app.route('/members')
 @admin_login
 def members():
     members = Member.objects()
        
-    return render_template('members.html',members=members)
+    return render_template('members.html',members=members, active_members=True)
 
 
 
@@ -210,7 +210,7 @@ def member(username):
                 return redirect('/member/'+session['user']['username'])
 
        
-    return render_template('member.html',member=member)
+    return render_template('member.html',member=member, active_profile=True)
 
 
 
@@ -378,6 +378,6 @@ def book_return():
 @admin_login
 def transactions():
     transactions = Transaction.objects()
-    return render_template('transactions.html',transactions=transactions)
+    return render_template('transactions.html',transactions=transactions, active_transactions=True)
 
 

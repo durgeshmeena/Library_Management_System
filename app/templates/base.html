@@ -53,22 +53,24 @@
       </a>
 
       <nav id="navbar" class="navbar">
-        <ul>
-          <li><a class="nav-link scrollto active" href="/">Home</a></li>
-          <li><a class="nav-link scrollto" href="/books">Books</a></li>
+        <ul id="h-items-active">
+          <li><a class="nav-link scrollto {% if active_home %} active {% endif %}" href="/">Home</a></li>
+          <li><a class="nav-link scrollto {% if active_books %} active {% endif %}" href="/books">Books</a></li>
 
           {% if 'logged_in' in session %}
               {% if session['user'].get('admin') %}
-                <li><a class="nav-link scrollto" href="/members">Members</a></li>
-                <li><a class="nav-link scrollto" href="/transactions">Transactions</a></li>
+                <li><a class="nav-link scrollto {% if active_members %} active {% endif %}" href="/members">Members</a></li>
+                <li><a class="nav-link scrollto {% if active_transactions %} active {% endif %}" href="/transactions">Transactions</a></li>
+                <li><a class="nav-link scrollto {% if active_add_book %} active {% endif %}" href="/add-book">Add Books</a></li>
+
               {% endif %}
-            <li><a class="nav-link scrollto" href="/member/{{session['user']['username']}}">Profile</a></li>  
+            <li><a class="nav-link scrollto {% if active_profile %} active {% endif %}" href="/member/{{session['user']['username']}}">Profile</a></li>  
             <li><a class="nav-link scrollto" href="/logout">Logout</a></li>
 
           {% else%}
 
-            <li><a class="nav-link scrollto" href="/login">Login</a></li>
-            <li><a class="nav-link scrollto" href="/signup">Signup</a></li>
+            <li><a class="nav-link scrollto {% if active_login %} active {% endif %}" href="/login">Login</a></li>
+            <li><a class="nav-link scrollto {% if active_signup %} active {% endif %}" href="/signup">Signup</a></li>
           {% endif %}
 
         </ul>
@@ -99,10 +101,10 @@
   <script src="/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
-  <script src="/js/main.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="/js/main.js"></script>
 
   <!-- Extra Script Files -->
   {% block extraScript %}
