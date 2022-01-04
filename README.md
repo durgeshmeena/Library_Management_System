@@ -27,7 +27,7 @@ Hosted Link : https://library-management-system29.herokuapp.com/
 # To Run the project:
 
 ## step 1 : 
-  Clone this repo by `git clone https://github.com/durgeshmeena/Library_Management_System`<br>
+  Clone this repo by `git clone https://github.com/durgeshmeena/Library_Management_System.git`<br>
  
 ## step 2 :  
 In root directry create `.env` file containg <br>
