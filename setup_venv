@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # ===========================================================
 # check if virtualenv exists and if not, create it
 if [ -f "venv/bin/activate" ]
